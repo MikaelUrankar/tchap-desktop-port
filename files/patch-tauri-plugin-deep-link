@@ -1,0 +1,152 @@
+diff -drup tauri-plugin-deep-link-2.4.3.orig/Cargo.toml tauri-plugin-deep-link-2.4.3/Cargo.toml
+--- cargo-crates/tauri-plugin-deep-link-2.4.3.orig/Cargo.toml	1970-01-01 01:00:01.000000000 +0100
++++ cargo-crates/tauri-plugin-deep-link-2.4.3/Cargo.toml	2026-03-19 13:29:42.769077000 +0100
+@@ -50,6 +50,10 @@ notes = ""
+ level = "full"
+ notes = ""
+ 
++[package.metadata.platforms.support.freebsd]
++level = "full"
++notes = ""
++
+ [package.metadata.platforms.support.macos]
+ level = "partial"
+ notes = "Deep links must be registered in config. Dynamic registration at runtime is not supported."
+@@ -100,6 +104,9 @@ version = "2.7"
+ version = "2.7"
+ 
+ [target.'cfg(target_os = "linux")'.dependencies.rust-ini]
++version = "0.21"
++
++[target.'cfg(target_os = "freebsd")'.dependencies.rust-ini]
+ version = "0.21"
+ 
+ [target.'cfg(target_os = "macos")'.build-dependencies.plist]
+diff -drup tauri-plugin-deep-link-2.4.3.orig/src/error.rs tauri-plugin-deep-link-2.4.3/src/error.rs
+--- cargo-crates/tauri-plugin-deep-link-2.4.3.orig/src/error.rs	2006-07-24 03:21:28.000000000 +0200
++++ cargo-crates/tauri-plugin-deep-link-2.4.3/src/error.rs	2026-03-19 13:09:32.342510000 +0100
+@@ -17,10 +17,10 @@ pub enum Error {
+     #[cfg(target_os = "windows")]
+     #[error(transparent)]
+     Windows(#[from] windows_result::Error),
+-    #[cfg(target_os = "linux")]
++    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+     #[error(transparent)]
+     Ini(#[from] ini::Error),
+-    #[cfg(target_os = "linux")]
++    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+     #[error(transparent)]
+     ParseIni(#[from] ini::ParseError),
+     #[cfg(mobile)]
+@@ -31,7 +31,7 @@ pub enum Error {
+ // TODO(v3): change this into an error in v3,
+ // see <https://github.com/tauri-apps/plugins-workspace/pull/2970#issuecomment-3244660138>.
+ #[inline]
+-#[cfg(target_os = "linux")]
++#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+ pub(crate) fn inspect_command_error<'a>(command: &'a str) -> impl Fn(&std::io::Error) + 'a {
+     move |e| {
+         tracing::error!("Failed to run OS command `{command}`: {e}");
+diff -drup tauri-plugin-deep-link-2.4.3.orig/src/lib.rs tauri-plugin-deep-link-2.4.3/src/lib.rs
+--- cargo-crates/tauri-plugin-deep-link-2.4.3.orig/src/lib.rs	2006-07-24 03:21:28.000000000 +0200
++++ cargo-crates/tauri-plugin-deep-link-2.4.3/src/lib.rs	2026-03-19 13:48:52.428717000 +0100
+@@ -162,13 +162,13 @@ mod imp {
+ #[cfg(not(target_os = "android"))]
+ mod imp {
+     use std::sync::Mutex;
+-    #[cfg(target_os = "linux")]
++    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+     use std::{
+         fs::{create_dir_all, File},
+         io::Write,
+         process::Command,
+     };
+-    #[cfg(target_os = "linux")]
++    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+     use tauri::Manager;
+     use tauri::{AppHandle, Runtime};
+     #[cfg(windows)]
+@@ -200,7 +200,7 @@ mod imp {
+                 return;
+             };
+ 
+-            if cfg!(windows) || cfg!(target_os = "linux") {
++            if cfg!(windows) || cfg!(target_os = "linux") || cfg!(target_os = "freebsd") {
+                 args.next(); // bin name
+                 let arg = args.next();
+ 
+@@ -280,20 +280,24 @@ mod imp {
+                 Ok(())
+             }
+ 
+-            #[cfg(target_os = "linux")]
++            #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+             {
+                 let bin = tauri::utils::platform::current_exe()?;
+                 let file_name = format!(
+                     "{}-handler.desktop",
+                     bin.file_name().unwrap().to_string_lossy()
+                 );
+-                let appimage = self.app.env().appimage;
+-                let exec = appimage
+-                    .clone()
+-                    .unwrap_or_else(|| bin.into_os_string())
++                let exec = bin.into_os_string()
+                     .to_string_lossy()
+                     .to_string();
+ 
++//                let appimage = self.app.env().appimage;
++//                let exec = appimage
++//                    .clone()
++//                    .unwrap_or_else(|| bin.into_os_string())
++//                    .to_string_lossy()
++//                    .to_string();
++
+                 let target = self.app.path().data_dir()?.join("applications");
+ 
+                 create_dir_all(&target)?;
+@@ -346,7 +350,7 @@ mod imp {
+                 Ok(())
+             }
+ 
+-            #[cfg(not(any(windows, target_os = "linux")))]
++            #[cfg(not(any(windows, target_os = "linux", target_os = "freebsd")))]
+             Err(crate::Error::UnsupportedPlatform)
+         }
+ 
+@@ -374,7 +378,7 @@ mod imp {
+                 Ok(())
+             }
+ 
+-            #[cfg(target_os = "linux")]
++            #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+             {
+                 let mimeapps_path = self.app.path().config_dir()?.join("mimeapps.list");
+                 let mut mimeapps = ini::Ini::load_from_file(&mimeapps_path)?;
+@@ -400,7 +404,7 @@ mod imp {
+                 Ok(())
+             }
+ 
+-            #[cfg(not(any(windows, target_os = "linux")))]
++            #[cfg(not(any(windows, target_os = "linux", target_os = "freebsd")))]
+             Err(crate::Error::UnsupportedPlatform)
+         }
+ 
+@@ -429,7 +433,7 @@ mod imp {
+ 
+                 Ok(registered_cmd == format!("\"{exe}\" \"%1\""))
+             }
+-            #[cfg(target_os = "linux")]
++            #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+             {
+                 let file_name = format!(
+                     "{}-handler.desktop",
+@@ -451,7 +455,7 @@ mod imp {
+                 Ok(String::from_utf8_lossy(&output.stdout).contains(&file_name))
+             }
+ 
+-            #[cfg(not(any(windows, target_os = "linux")))]
++            #[cfg(not(any(windows, target_os = "linux", target_os = "freebsd")))]
+             Err(crate::Error::UnsupportedPlatform)
+         }
+     }

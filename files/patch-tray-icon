@@ -1,0 +1,69 @@
+diff -drup tray-icon-0.21.1.orig/Cargo.toml tray-icon-0.21.1/Cargo.toml
+--- cargo-crates/tray-icon-0.21.1.orig/Cargo.toml	1970-01-01 01:00:01.000000000 +0100
++++ cargo-crates/tray-icon-0.21.1/Cargo.toml	2026-03-19 09:01:50.608304000 +0100
+@@ -85,16 +85,25 @@ version = "0.30"
+ [dev-dependencies.winit]
+ version = "0.30"
+ 
+-[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dependencies.png]
++[target.'cfg(any(target_os = "linux", target_os = "macos", target_os = "freebsd"))'.dependencies.png]
+ version = "0.17"
+ 
+ [target.'cfg(target_os = "linux")'.dependencies.dirs]
+ version = "6"
+ 
++[target.'cfg(target_os = "freebsd")'.dependencies.dirs]
++version = "6"
++
+ [target.'cfg(target_os = "linux")'.dependencies.libappindicator]
+ version = "0.9"
+ 
++[target.'cfg(target_os = "freebsd")'.dependencies.libappindicator]
++version = "0.9"
++
+ [target.'cfg(target_os = "linux")'.dev-dependencies.gtk]
++version = "0.18"
++
++[target.'cfg(target_os = "freebsd")'.dev-dependencies.gtk]
+ version = "0.18"
+ 
+ [target.'cfg(target_os = "macos")'.dependencies.objc2]
+diff -drup tray-icon-0.21.1.orig/src/error.rs tray-icon-0.21.1/src/error.rs
+--- cargo-crates/tray-icon-0.21.1.orig/src/error.rs	2006-07-24 03:21:28.000000000 +0200
++++ cargo-crates/tray-icon-0.21.1/src/error.rs	2026-03-19 09:03:16.126214000 +0100
+@@ -10,7 +10,7 @@ pub enum Error {
+ pub enum Error {
+     #[error(transparent)]
+     OsError(#[from] std::io::Error),
+-    #[cfg(any(target_os = "linux", target_os = "macos"))]
++    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "freebsd"))]
+     #[error(transparent)]
+     PngEncodingError(#[from] png::EncodingError),
+     #[error("not on the main thread")]
+diff -drup tray-icon-0.21.1.orig/src/lib.rs tray-icon-0.21.1/src/lib.rs
+--- cargo-crates/tray-icon-0.21.1.orig/src/lib.rs	2006-07-24 03:21:28.000000000 +0200
++++ cargo-crates/tray-icon-0.21.1/src/lib.rs	2026-03-19 09:03:02.207180000 +0100
+@@ -412,9 +412,9 @@ impl TrayIcon {
+     /// On Linux, we need to write the icon to the disk and usually it will
+     /// be `$XDG_RUNTIME_DIR/tray-icon` or `$TEMP/tray-icon`.
+     pub fn set_temp_dir_path<P: AsRef<Path>>(&self, path: Option<P>) {
+-        #[cfg(target_os = "linux")]
++        #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+         self.tray.borrow_mut().set_temp_dir_path(path);
+-        #[cfg(not(target_os = "linux"))]
++        #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
+         let _ = path;
+     }
+ 
+diff -drup tray-icon-0.21.1.orig/src/platform_impl/mod.rs tray-icon-0.21.1/src/platform_impl/mod.rs
+--- cargo-crates/tray-icon-0.21.1.orig/src/platform_impl/mod.rs	2006-07-24 03:21:28.000000000 +0200
++++ cargo-crates/tray-icon-0.21.1/src/platform_impl/mod.rs	2026-03-19 09:02:23.823504000 +0100
+@@ -5,7 +5,7 @@ mod platform;
+ #[cfg(target_os = "windows")]
+ #[path = "windows/mod.rs"]
+ mod platform;
+-#[cfg(target_os = "linux")]
++#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+ #[path = "gtk/mod.rs"]
+ mod platform;
+ #[cfg(target_os = "macos")]

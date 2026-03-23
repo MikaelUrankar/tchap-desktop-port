@@ -1,0 +1,27 @@
+diff -drup tauri-plugin-autostart-2.5.1.orig/Cargo.toml tauri-plugin-autostart-2.5.1/Cargo.toml
+--- cargo-crates/tauri-plugin-autostart-2.5.1.orig/Cargo.toml	1970-01-01 01:00:01.000000000 +0100
++++ cargo-crates/tauri-plugin-autostart-2.5.1/Cargo.toml	2026-03-19 10:47:35.377189000 +0100
+@@ -35,6 +35,10 @@ notes = ""
+ level = "full"
+ notes = ""
+ 
++[package.metadata.platforms.support.freebsd]
++level = "full"
++notes = ""
++
+ [package.metadata.platforms.support.macos]
+ level = "full"
+ notes = ""
+diff -drup tauri-plugin-autostart-2.5.1.orig/src/lib.rs tauri-plugin-autostart-2.5.1/src/lib.rs
+--- cargo-crates/tauri-plugin-autostart-2.5.1.orig/src/lib.rs	2006-07-24 03:21:28.000000000 +0200
++++ cargo-crates/tauri-plugin-autostart-2.5.1/src/lib.rs	2026-03-19 13:00:47.185169000 +0100
+@@ -188,6 +188,9 @@ impl Builder {
+                 #[cfg(windows)]
+                 builder.set_app_path(&current_exe.display().to_string());
+ 
++                #[cfg(target_os = "freebsd")]
++                builder.set_app_path(&current_exe.display().to_string());
++
+                 #[cfg(target_os = "macos")]
+                 {
+                     builder.set_use_launch_agent(matches!(
