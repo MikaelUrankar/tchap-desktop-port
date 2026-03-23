@@ -7,15 +7,23 @@ DISTFILES=	tchap-${DISTVERSION}.tar.gz \
 		tchap-${DISTVERSION}-prod-${WEB_ARCHIVE_DATE}.tar.gz:web
 
 MAINTAINER=	mikael@FreeBSD.org
-COMMENT=	La messagerie instantanée du secteur public
+COMMENT=	La messagerie instantanee du secteur public
 WWW=		https://www.tchap.gouv.fr/
 
-USES=		cargo
-GH_ACCOUNT=	tchapgouv
-#GH_PROJECT=	tchap-desktop
+LICENSE=	MIT
+LICENSE_FILE=	${WRKSRC}/LICENCE
 
-CARGO_CARGOTOML=	${CARGO_WRKSRC}/src-tauri/Cargo.toml
-CARGO_CARGOLOCK=	${CARGO_WRKSRC}/src-tauri/Cargo.lock
+LIB_DEPENDS=	libdbus-1.so:devel/dbus \
+		libsoup-3.0.so:devel/libsoup3 \
+		libwebkit2gtk-4.1.so:www/webkit2-gtk@41
+
+USES=		cargo gmake gnome pkgconfig ssl
+USE_GNOME=	atk cairo gdkpixbuf glib20 gtk30 pango
+
+GH_ACCOUNT=	tchapgouv
+
+CARGO_CARGOTOML=${CARGO_WRKSRC}/src-tauri/Cargo.toml
+CARGO_CARGOLOCK=${CARGO_WRKSRC}/src-tauri/Cargo.lock
 
 # https://github.com/tchapgouv/tchap-desktop/blob/tchap-4.19.2/package.json: tchap-web_archive_name
 WEB_ARCHIVE_DATE=	20260319
