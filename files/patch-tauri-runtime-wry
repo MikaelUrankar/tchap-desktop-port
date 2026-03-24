@@ -1,6 +1,5 @@
-diff -drup tauri-runtime-wry-2.8.1.orig/src/lib.rs tauri-runtime-wry-2.8.1/src/lib.rs
---- cargo-crates/tauri-runtime-wry-2.8.1.orig/src/lib.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-runtime-wry-2.8.1/src/lib.rs	2026-03-19 09:00:01.795131000 +0100
+--- cargo-crates/tauri-runtime-wry-2.8.1/src/lib.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-runtime-wry-2.8.1/src/lib.rs
 @@ -35,7 +35,7 @@ use tao::platform::macos::{EventLoopWindowTargetExtMac
  use objc2::rc::Retained;
  #[cfg(target_os = "macos")]
@@ -37,4 +36,3 @@ diff -drup tauri-runtime-wry-2.8.1.orig/src/lib.rs tauri-runtime-wry-2.8.1/src/l
              let _ = window.set_skip_taskbar(skip);
            }
            WindowMessage::SetCursorGrab(grab) => {
-Only in tauri-runtime-wry-2.8.1/src: tauri-runtime-wry-2.8.1.orig

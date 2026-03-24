@@ -1,7 +1,5 @@
-Only in nix-0.14.1/src/sys: .event.rs.swp
-diff -drup nix-0.14.1.orig/src/sys/event.rs nix-0.14.1/src/sys/event.rs
---- cargo-crates/nix-0.14.1.orig/src/sys/event.rs	2019-06-03 15:01:58.000000000 +0200
-+++ cargo-crates/nix-0.14.1/src/sys/event.rs	2026-03-19 09:28:18.756493000 +0100
+--- cargo-crates/nix-0.14.1/src/sys/event.rs	2019-06-03 15:01:58 UTC
++++ cargo-crates/nix-0.14.1/src/sys/event.rs
 @@ -25,12 +25,14 @@ type type_of_udata = *mut libc::c_void;
  type type_of_udata = *mut libc::c_void;
  #[cfg(any(target_os = "dragonfly", target_os = "freebsd",

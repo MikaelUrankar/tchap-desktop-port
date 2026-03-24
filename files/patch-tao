@@ -1,6 +1,5 @@
-diff -drup tao-0.34.3.orig/src/event_loop.rs tao-0.34.3/src/event_loop.rs
---- cargo-crates/tao-0.34.3.orig/src/event_loop.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tao-0.34.3/src/event_loop.rs	2026-03-19 09:14:00.643079000 +0100
+--- cargo-crates/tao-0.34.3/src/event_loop.rs.orig	2006-07-24 03:21:28 UTC
++++ cargo-crates/tao-0.34.3/src/event_loop.rs
 @@ -296,7 +296,7 @@ impl<T> EventLoopWindowTarget<T> {
    /// - **iOS / Android:** Unsupported.
    #[inline]
@@ -10,9 +9,8 @@ diff -drup tao-0.34.3.orig/src/event_loop.rs tao-0.34.3/src/event_loop.rs
      self.p.set_progress_bar(_progress)
    }
  
-diff -drup tao-0.34.3.orig/src/window.rs tao-0.34.3/src/window.rs
---- cargo-crates/tao-0.34.3.orig/src/window.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tao-0.34.3/src/window.rs	2026-03-19 09:14:32.210594000 +0100
+--- cargo-crates/tao-0.34.3/src/window.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tao-0.34.3/src/window.rs
 @@ -1225,7 +1225,7 @@ impl Window {
    ///
    /// - **iOS / Android / Windows:** Unsupported.

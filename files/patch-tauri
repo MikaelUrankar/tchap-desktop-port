@@ -1,6 +1,5 @@
-diff -drup tauri-2.8.5.orig/src/app.rs tauri-2.8.5/src/app.rs
---- cargo-crates/tauri-2.8.5.orig/src/app.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-2.8.5/src/app.rs	2026-03-19 09:31:37.152604000 +0100
+--- cargo-crates/tauri-2.8.5/src/app.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-2.8.5/src/app.rs
 @@ -1375,7 +1375,7 @@ pub struct Builder<R: Runtime> {
  #[allow(clippy::type_complexity)]
  pub struct Builder<R: Runtime> {
@@ -46,9 +45,9 @@ diff -drup tauri-2.8.5.orig/src/app.rs tauri-2.8.5/src/app.rs
      let mut runtime = R::new(runtime_args)?;
  
      #[cfg(desktop)]
-diff -drup tauri-2.8.5.orig/src/manager/webview.rs tauri-2.8.5/src/manager/webview.rs
---- cargo-crates/tauri-2.8.5.orig/src/manager/webview.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-2.8.5/src/manager/webview.rs	2026-03-19 09:09:59.559767000 +0100
+
+--- cargo-crates/tauri-2.8.5/src/manager/webview.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-2.8.5/src/manager/webview.rs
 @@ -504,7 +504,7 @@ impl<R: Runtime> WebviewManager<R> {
  
      // in `windows`, we need to force a data_directory
@@ -58,9 +57,9 @@ diff -drup tauri-2.8.5.orig/src/manager/webview.rs tauri-2.8.5/src/manager/webvi
      if pending.webview_attributes.data_directory.is_none() {
        let local_app_data = manager.path().resolve(
          &app_manager.config.identifier,
-diff -drup tauri-2.8.5.orig/src/tray/mod.rs tauri-2.8.5/src/tray/mod.rs
---- cargo-crates/tauri-2.8.5.orig/src/tray/mod.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-2.8.5/src/tray/mod.rs	2026-03-19 09:31:56.592843000 +0100
+
+--- cargo-crates/tauri-2.8.5/src/tray/mod.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-2.8.5/src/tray/mod.rs
 @@ -562,7 +562,7 @@ impl<R: Runtime> TrayIcon<R> {
    pub fn set_temp_dir_path<P: AsRef<Path>>(&self, path: Option<P>) -> crate::Result<()> {
      #[allow(unused)]
@@ -70,9 +69,9 @@ diff -drup tauri-2.8.5.orig/src/tray/mod.rs tauri-2.8.5/src/tray/mod.rs
      run_item_main_thread!(self, |self_: Self| self_.inner.set_temp_dir_path(p))?;
      Ok(())
    }
-diff -drup tauri-2.8.5.orig/src/webview/mod.rs tauri-2.8.5/src/webview/mod.rs
---- cargo-crates/tauri-2.8.5.orig/src/webview/mod.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-2.8.5/src/webview/mod.rs	2026-03-19 09:07:39.705353000 +0100
+
+--- cargo-crates/tauri-2.8.5/src/webview/mod.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-2.8.5/src/webview/mod.rs
 @@ -1548,7 +1548,7 @@ tauri::Builder::default()
    .setup(|app| {
      let main_webview = app.get_webview("main").unwrap();
@@ -82,9 +81,9 @@ diff -drup tauri-2.8.5.orig/src/webview/mod.rs tauri-2.8.5/src/webview/mod.rs
        {
          // see <https://docs.rs/webkit2gtk/2.0.0/webkit2gtk/struct.WebView.html>
          // and <https://docs.rs/webkit2gtk/2.0.0/webkit2gtk/trait.WebViewExt.html>
-diff -drup tauri-2.8.5.orig/src/webview/webview_window.rs tauri-2.8.5/src/webview/webview_window.rs
---- cargo-crates/tauri-2.8.5.orig/src/webview/webview_window.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-2.8.5/src/webview/webview_window.rs	2026-03-19 09:08:05.673911000 +0100
+
+--- cargo-crates/tauri-2.8.5/src/webview/webview_window.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-2.8.5/src/webview/webview_window.rs
 @@ -2214,7 +2214,7 @@ impl<R: Runtime> WebviewWindow<R> {
    ///     .setup(|app| {
    ///       let main_webview = app.get_webview_window("main").unwrap();
@@ -94,8 +93,8 @@ diff -drup tauri-2.8.5.orig/src/webview/webview_window.rs tauri-2.8.5/src/webvie
    ///         {
    ///           // see <https://docs.rs/webkit2gtk/2.0.0/webkit2gtk/struct.WebView.html>
    ///           // and <https://docs.rs/webkit2gtk/2.0.0/webkit2gtk/trait.WebViewExt.html>
-diff -drup tauri-2.8.5.orig/src/window/mod.rs tauri-2.8.5/src/window/mod.rs
---- cargo-crates/tauri-2.8.5.orig/src/window/mod.rs	2006-07-24 03:21:28.000000000 +0200
+
+--- cargo-crates/tauri-2.8.5/src/window/mod.rs	2006-07-24 03:21:28 UTC
 +++ cargo-crates/tauri-2.8.5/src/window/mod.rs	2026-03-19 09:06:27.818961000 +0100
 @@ -2208,7 +2208,7 @@ tauri::Builder::default()
  #[cfg(desktop)]

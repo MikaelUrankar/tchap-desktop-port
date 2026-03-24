@@ -1,7 +1,5 @@
-Only in tauri-runtime-2.8.0/src: .lib.rs.swp
-diff -drup tauri-runtime-2.8.0.orig/src/lib.rs tauri-runtime-2.8.0/src/lib.rs
---- cargo-crates/tauri-runtime-2.8.0.orig/src/lib.rs	2006-07-24 03:21:28.000000000 +0200
-+++ cargo-crates/tauri-runtime-2.8.0/src/lib.rs	2026-03-19 09:22:13.338660000 +0100
+--- cargo-crates/tauri-runtime-2.8.0/src/lib.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-runtime-2.8.0/src/lib.rs
 @@ -404,8 +404,8 @@ pub trait Runtime<T: UserEvent>: Debug + Sized + 'stat
    fn new(args: RuntimeInitArgs) -> Result<Self>;
  
