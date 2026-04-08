@@ -1,5 +1,5 @@
 PORTNAME=	tchap-desktop
-DISTVERSION=	4.19.2
+DISTVERSION=	4.19.3
 CATEGORIES=	net-im
 MASTER_SITES=	https://github.com/${GH_ACCOUNT}/${PORTNAME}/archive/refs/tags/ \
 		https://github.com/tchapgouv/tchap-web-v4/releases/download/tchap-${DISTVERSION}/:web
@@ -26,7 +26,7 @@ CARGO_CARGOTOML=${CARGO_WRKSRC}/src-tauri/Cargo.toml
 CARGO_CARGOLOCK=${CARGO_WRKSRC}/src-tauri/Cargo.lock
 
 # https://github.com/tchapgouv/tchap-desktop/blob/tchap-4.19.2/package.json: tchap-web_archive_name
-WEB_ARCHIVE_DATE=	20260319
+WEB_ARCHIVE_DATE=	20260401
 
 # npm run fetch-package -- prod
 # -> scripts/fetch-package.ts
