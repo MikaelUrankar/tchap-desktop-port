@@ -1,0 +1,35 @@
+--- ../tauri-plugins-workspace-8c117b73c66df17343748c399f12e6a3b1496c99/plugins/updater/Cargo.toml.orig	2026-11-17 09:35:19.165833000 +0100
++++ ../tauri-plugins-workspace-8c117b73c66df17343748c399f12e6a3b1496c99/plugins/updater/Cargo.toml	2026-11-17 09:41:27.107054000 +0100
+@@ -27,6 +27,7 @@ ios = { level = "none", notes = "" }
+ macos = { level = "full", notes = "" }
+ android = { level = "none", notes = "" }
+ ios = { level = "none", notes = "" }
++freebsd = { level = "none", notes = "" }
+ 
+ [build-dependencies]
+ tauri-plugin = { workspace = true, features = ["build"] }
+@@ -65,6 +66,11 @@ windows-sys = { version = "0.60.0", features = [
+ ] }
+ 
+ [target."cfg(target_os = \"linux\")".dependencies]
++dirs = "6"
++tar = { version = "0.4", optional = true }
++flate2 = { version = "1", optional = true }
++
++[target."cfg(target_os = \"freebsd\")".dependencies]
+ dirs = "6"
+ tar = { version = "0.4", optional = true }
+ flate2 = { version = "1", optional = true }
+--- ../tauri-plugins-workspace-8c117b73c66df17343748c399f12e6a3b1496c99/plugins/updater/src/updater.rs.orig	2026-11-17 09:37:13.760323000 +0100
++++ ../tauri-plugins-workspace-8c117b73c66df17343748c399f12e6a3b1496c99/plugins/updater/src/updater.rs	2026-11-17 09:37:24.422609000 +0100
+@@ -1023,10 +1023,6 @@ impl Update {
+ /// Linux (AppImage, Deb, RPM)
+ #[cfg(any(
+     target_os = "linux",
+-    target_os = "dragonfly",
+-    target_os = "freebsd",
+-    target_os = "netbsd",
+-    target_os = "openbsd"
+ ))]
+ impl Update {
+     /// ### Expected structure:

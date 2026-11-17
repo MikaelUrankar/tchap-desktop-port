@@ -1,5 +1,5 @@
---- cargo-crates/tao-0.34.3/src/event_loop.rs.orig	2006-07-24 03:21:28 UTC
-+++ cargo-crates/tao-0.34.3/src/event_loop.rs
+--- cargo-crates/tao-0.35.3/src/event_loop.rs.orig	2006-07-24 03:21:28 UTC
++++ cargo-crates/tao-0.35.3/src/event_loop.rs
 @@ -296,7 +296,7 @@ impl<T> EventLoopWindowTarget<T> {
    /// - **iOS / Android:** Unsupported.
    #[inline]
@@ -9,8 +9,8 @@
      self.p.set_progress_bar(_progress)
    }
  
---- cargo-crates/tao-0.34.3/src/window.rs	2006-07-24 03:21:28 UTC
-+++ cargo-crates/tao-0.34.3/src/window.rs
+--- cargo-crates/tao-0.35.3/src/window.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tao-0.35.3/src/window.rs
 @@ -1225,7 +1225,7 @@ impl Window {
    ///
    /// - **iOS / Android / Windows:** Unsupported.

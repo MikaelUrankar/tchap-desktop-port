@@ -1,5 +1,5 @@
---- cargo-crates/tauri-plugin-single-instance-2.3.4/Cargo.toml	2026-03-19 09:48:20 UTC
-+++ cargo-crates/tauri-plugin-single-instance-2.3.4/Cargo.toml
+--- cargo-crates/tauri-plugin-single-instance-2.4.3/Cargo.toml	2026-03-19 09:48:20 UTC
++++ cargo-crates/tauri-plugin-single-instance-2.4.3/Cargo.toml
 @@ -97,6 +97,9 @@ version = "5.9"
  [target.'cfg(target_os = "linux")'.dependencies.zbus]
  version = "5.9"
@@ -11,8 +11,8 @@
  version = "0.60"
  features = [
 
---- cargo-crates/tauri-plugin-single-instance-2.3.4/src/lib.rs	2006-07-24 03:21:28 UTC
-+++ cargo-crates/tauri-plugin-single-instance-2.3.4/src/lib.rs
+--- cargo-crates/tauri-plugin-single-instance-2.4.3/src/lib.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-plugin-single-instance-2.4.3/src/lib.rs
 @@ -15,7 +15,7 @@ mod platform_impl;
  #[cfg(target_os = "windows")]
  #[path = "platform_impl/windows.rs"]
@@ -22,3 +22,12 @@
  #[path = "platform_impl/linux.rs"]
  mod platform_impl;
  #[cfg(target_os = "macos")]
+@@ -91,7 +91,7 @@ impl<R: Runtime> Builder<R> {
+     pub fn build(self) -> TauriPlugin<R> {
+         platform_impl::init(
+             self.callback,
+-            #[cfg(target_os = "linux")]
++            #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+             self.dbus_id,
+         )
+     }

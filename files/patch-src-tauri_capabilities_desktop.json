@@ -1,0 +1,10 @@
+--- src-tauri/capabilities/desktop.json.orig	2026-11-17 14:04:17 UTC
++++ src-tauri/capabilities/desktop.json
+@@ -9,7 +9,6 @@
+     "main"
+   ],
+   "permissions": [
+-    "updater:default",
+     "autostart:default",
+     "window-state:default",
+     "store:default"

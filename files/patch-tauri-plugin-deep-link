@@ -1,5 +1,5 @@
---- cargo-crates/tauri-plugin-deep-link-2.4.3/Cargo.toml	1970-01-01 01:00:01 UTC
-+++ cargo-crates/tauri-plugin-deep-link-2.4.3/Cargo.toml
+--- cargo-crates/tauri-plugin-deep-link-2.4.9/Cargo.toml	1970-01-01 01:00:01 UTC
++++ cargo-crates/tauri-plugin-deep-link-2.4.9/Cargo.toml
 @@ -50,6 +50,10 @@ notes = ""
  level = "full"
  notes = ""
@@ -22,8 +22,8 @@
  
  [target.'cfg(target_os = "macos")'.build-dependencies.plist]
 
---- cargo-crates/tauri-plugin-deep-link-2.4.3/src/error.rs	2006-07-24 03:21:28 UTC
-+++ cargo-crates/tauri-plugin-deep-link-2.4.3/src/error.rs
+--- cargo-crates/tauri-plugin-deep-link-2.4.9/src/error.rs	2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-plugin-deep-link-2.4.9/src/error.rs
 @@ -17,10 +17,10 @@ pub enum Error {
      #[cfg(target_os = "windows")]
      #[error(transparent)]
@@ -47,8 +47,8 @@
      move |e| {
          tracing::error!("Failed to run OS command `{command}`: {e}");
 
---- cargo-crates/tauri-plugin-deep-link-2.4.3/src/lib.rs	2006-07-24 03:21:28 UTC
-+++ cargo-crates/tauri-plugin-deep-link-2.4.3/src/lib.rs
+--- cargo-crates/tauri-plugin-deep-link-2.4.9/src/lib.rs        2006-07-24 03:21:28 UTC
++++ cargo-crates/tauri-plugin-deep-link-2.4.9/src/lib.rs
 @@ -162,13 +162,13 @@ mod imp {
  #[cfg(not(target_os = "android"))]
  mod imp {
@@ -74,7 +74,7 @@
                  args.next(); // bin name
                  let arg = args.next();
  
-@@ -280,20 +280,24 @@ mod imp {
+@@ -280,19 +280,26 @@ mod imp {
                  Ok(())
              }
  
@@ -90,21 +90,25 @@
 -                let exec = appimage
 -                    .clone()
 -                    .unwrap_or_else(|| bin.into_os_string())
-+                let exec = bin.into_os_string()
-                     .to_string_lossy()
-                     .to_string();
- 
-+//                let appimage = self.app.env().appimage;
-+//                let exec = appimage
-+//                    .clone()
-+//                    .unwrap_or_else(|| bin.into_os_string())
-+//                    .to_string_lossy()
-+//                    .to_string();
+-                    .to_string_lossy()
+-                    .to_string();
++                #[cfg(target_os = "linux")]
++                    let exec = self
++                        .app
++                        .env()
++                        .appimage
++                        .clone()
++                        .unwrap_or_else(|| bin.into_os_string())
++                        .to_string_lossy()
++                        .to_string();
 +
-                 let target = self.app.path().data_dir()?.join("applications");
++                #[cfg(target_os = "freebsd")]
++                let exec = bin.into_os_string().to_string_lossy().to_string();
++    
+                 let qualified_exec = format!("\"{}\" %u", exec);
  
-                 create_dir_all(&target)?;
-@@ -346,7 +350,7 @@ mod imp {
+                 let target = self.app.path().data_dir()?.join("applications");
+@@ -363,7 +370,7 @@ mod imp {
                  Ok(())
              }
  
@@ -113,7 +117,7 @@
              Err(crate::Error::UnsupportedPlatform)
          }
  
-@@ -374,7 +378,7 @@ mod imp {
+@@ -391,7 +398,7 @@ mod imp {
                  Ok(())
              }
  
@@ -122,7 +126,7 @@
              {
                  let mimeapps_path = self.app.path().config_dir()?.join("mimeapps.list");
                  let mut mimeapps = ini::Ini::load_from_file(&mimeapps_path)?;
-@@ -400,7 +404,7 @@ mod imp {
+@@ -417,7 +424,7 @@ mod imp {
                  Ok(())
              }
  
@@ -131,7 +135,7 @@
              Err(crate::Error::UnsupportedPlatform)
          }
  
-@@ -429,7 +433,7 @@ mod imp {
+@@ -446,7 +453,7 @@ mod imp {
  
                  Ok(registered_cmd == format!("\"{exe}\" \"%1\""))
              }
@@ -140,7 +144,7 @@
              {
                  let file_name = format!(
                      "{}-handler.desktop",
-@@ -451,7 +455,7 @@ mod imp {
+@@ -468,7 +475,7 @@ mod imp {
                  Ok(String::from_utf8_lossy(&output.stdout).contains(&file_name))
              }
  

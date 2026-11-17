@@ -1,0 +1,18 @@
+--- src-tauri/Cargo.toml.orig	2026-11-13 11:31:27 UTC
++++ src-tauri/Cargo.toml
+@@ -43,7 +43,7 @@ log = { version = "0.4", features = ["release_max_leve
+ [features]
+ # by default Tauri runs in production mode
+ # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
+-default = [ "custom-protocol" ]
++default = [ "custom-protocol", "no-updater" ]
+ # this feature is used used for production builds where `devPath` points to the filesystem
+ # DO NOT remove this
+ custom-protocol = [ "tauri/custom-protocol" ]
+@@ -54,5 +54,5 @@ tauri-plugin-single-instance = { version = "2", featur
+ tauri-plugin-single-instance = { version = "2", features = ["deep-link"] }
+ # Getting the PR https://github.com/tauri-apps/plugins-workspace/pull/3526
+ # In order to have system proxy enabled for updater in official release
+-tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
++#tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+ tauri-plugin-window-state = "2"
